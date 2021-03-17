@@ -1,28 +1,77 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+ <matchup-header :teams="teams" />
+    <results-container :teams="teams" />
+    
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import MatchupHeader from './components/MatchupHeader.vue'
 
 export default {
-  name: 'App',
+  name: '',
   components: {
-    HelloWorld
-  }
+    MatchupHeader
+ 
+  },
+    data() {
+      return {
+
+  teams: [
+        {
+          name: "Team 1",
+          score: 0,
+          winning: false
+        },
+        {
+          name: "Team 2",
+          score: 0,
+          winning: false
+        }
+      ]
+      }
+
+    },
+    methods: {
+    checkWinner() {
+      const [team1, team2] = this.teams;
+      if (team1.score > team2.score) {
+        team1.winning = true;
+        team2.winning = false;
+      } else if (team1.score < team2.score) {
+        team1.winning = false;
+        team2.winning = true;
+      } else if (team1.score === team2.score) {
+        team1.winning = false;
+        team2.winning = false;
+      }
+    },
+    handleAddScore(team) {
+      ++team.score;
+      this.checkWinner();
+    },
+    handleRemoveScore(team) {
+      team.score !== 0 && --team.score;
+      this.checkWinner();
+    }
+  },
+
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  font-family: sans-serif;
+  color: rgb(41, 41, 41);
+  background-color: var(--background);
+  box-sizing: content-box;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 </style>
